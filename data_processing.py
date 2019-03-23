@@ -14,7 +14,7 @@ columns_to_drop = [\
     'Category', 'Measure', \
     'Data_Value_Unit', 'Data_Value_Footnote',\
     'Data_Value_Type', 'Low_Confidence_Limit', \
-        'GeoLocation',\
+       # 'GeoLocation',\
     'High_Confidence_Limit', 'Data_Value_Footnote_Symbol', \
     'CategoryID','Short_Question_Text']
 
@@ -24,7 +24,7 @@ columns_to_keep = [\
     'UniqueID', 'GeographicLevel',\
     'DataValueTypeID',\
     'PopulationCount',\
-    'CityFIPS','TractFIPS']
+    'CityFIPS','TractFIPS','GeoLocation']
     #MeasureId and Data_value are kept but are used to transpose the data
 
 #drop unecessary columns
@@ -55,7 +55,7 @@ data = data.pivot_table(index=columns_to_keep,columns = 'MeasureId', values = 'D
 for outcome in outcome_cols[:]:
     corr_cols = [outcome]
     corr_cols.extend(behavior_cols)
-   # corr_cols.extend(prevention_cols)
+    corr_cols.extend(prevention_cols)
     cancer_data = data[corr_cols]
     corr = cancer_data.corr()
     print(outcome, ' correlation')
@@ -64,11 +64,10 @@ for outcome in outcome_cols[:]:
     plt.plot(corr[outcome])
     plt.ylabel(outcome)
     plt.xticks(rotation='vertical')
-    plt.show()
+  #  plt.show() #UNCOMMENT TO SEE PLOT
 
- #   ax = sns.heatmap(corr)
+ #   ax = sns.heatmap(corr) # UNCOMMENT TO SEE HEATMAP
  #   plt.show()
-
 
 # Uncomment to export tranposed data
 data.to_csv('cleaned_data.csv')
