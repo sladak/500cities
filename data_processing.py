@@ -2,14 +2,10 @@ import numpy as np
 import pandas as pd
 import time
 import seaborn as sns
-
-
-data = pd.read_csv('full_data.csv')
-
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Separate out the x_data and y_data.
+data = pd.read_csv('full_data.csv')
 
 #x_data = data.loc[:, data.columns != "y"]
 #y_data = data.loc[:, "y"]
@@ -29,9 +25,9 @@ columns_to_keep = [\
     'DataValueTypeID',\
     'PopulationCount',\
     'CityFIPS','TractFIPS']
-    #MeasureId and Data_value
+    #MeasureId and Data_value are kept but are used to transpose the data
 
-#for col in columns_to_drop:
+#drop unecessary columns
 data = data.drop(columns=columns_to_drop)
 #print(data.columns)
 
@@ -51,13 +47,11 @@ outcome_cols = [\
 
 #remove age-adjusted data
 data = data.drop(data[data.DataValueTypeID == 'AgeAdjPrv'].index)
-data = data.drop(data[data.Data_Value == 'AgeAdjPrv'].index)
+#data = data.drop(data[data.Data_Value == 'AgeAdjPrv'].index)
 
 data = data.pivot_table(index=columns_to_keep,columns = 'MeasureId', values = 'Data_Value')
 
-#mpl.use('agg')
-
-
+# Find and plot correlation between outcome features and other features
 for outcome in outcome_cols[:]:
     corr_cols = [outcome]
     corr_cols.extend(behavior_cols)
@@ -76,5 +70,6 @@ for outcome in outcome_cols[:]:
  #   plt.show()
 
 
-#data.to_csv('cleaned_data.csv')
+# Uncomment to export tranposed data
+data.to_csv('cleaned_data.csv')
 #print(data.columns)
