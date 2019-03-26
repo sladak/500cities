@@ -10,28 +10,32 @@ from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.svm import SVR
 
 from get_data import get_data
+from constants import *
+from util import analyze_state_level_data
 
-# import sys
-# sys.stdout = open('C:/Users/BQQ/IdeaProjects/500cities/stdout.txt', 'w')
+
+def setup_log():
+    global logger
+    # output_dir = "/tmp/somefile"
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    # handler = logging.FileHandler(output_dir, "w")
+    # handler.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(levelname)s - %(message)s")
+    # handler.setFormatter(formatter)
+    # logger.addHandler(handler)
+    ch = logging.StreamHandler()
+    logger.addHandler(ch)
+    logger.info("Logger ready")
+
 
 warnings.filterwarnings("ignore")  # ignore warnings from sklean
-
-prevention_cols = [
-    'ACCESS2', 'BPMED', 'CHECKUP', 'CHOLSCREEN',
-    'COLON_SCREEN', 'COREM', 'COREW', 'DENTAL', 'MAMMOUSE', 'PAPTEST']
-
-behavior_cols = ['BINGE', 'CSMOKING', 'LPA', 'OBESITY', 'SLEEP']
-
-outcome_cols = [
-    'ARTHRITIS', 'BPHIGH', 'CANCER',
-    'CASTHMA', 'CHD', 'COPD',
-    'DIABETES', 'HIGHCHOL', 'KIDNEY',
-    'MHLTH', 'PHLTH', 'STROKE', 'TEETHLOST']
+setup_log()
 
 # Change this to your local path
 path = "500_Cities__Local_Data_for_Better_Health__2018_release.csv"
 city_pv, tract_pv = get_data(path)
-logging.info("Get formatted pivot table data by city and census track from file:", path)
+logging.info("Get formatted pivot table data by city and census track from file: " + path)
 
 # TODO: split tract_pv by city to run below analysis (can set a threshold to run for city with a minimum # of census
 #  tract). Write a loop to analyze data for each outcome
@@ -94,9 +98,14 @@ selector = selector.fit(x_train, y_train)
 # print(selector.ranking_)
 print("top features:", x_test.columns[selector.support_])
 
+
+analyze_state_level_data(tract_pv)
 # TODO: Random Forest Regression?
 
 # TODO: model comparison - select the best model based on score?
 
-# TODO: Generate results in a proper format
 
+# TODO: Generate results in a proper format
+# GeoLevel                      | Best Model | Top 5 params    | Test Score | ....
+# Country (By city)             | svm        | [a,b,c,d,e]    | 0.8542      |....
+# City/State? (By census tract) | Lasso      | [d,e,f,g,h]   |  0.8624      |....
