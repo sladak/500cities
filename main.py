@@ -6,7 +6,7 @@ import statsmodels.api as sm
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.metrics import r2_score
-from sklearn.model_selection import GridSearchCV, train_test_split, cross_val_score
+from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.svm import SVR
 
 from get_data import get_data
@@ -50,46 +50,32 @@ x_train, x_test, y_train, y_test = train_test_split(x_data, y_data, train_size=0
 
 # TODO: seperate them into a function
 # Linear Regression
-#reg = LinearRegression().fit(x_train, y_train)
+reg = LinearRegression().fit(x_train, y_train)
 # print(reg.intercept_)
 # print(reg.coef_)
-
-reg = LinearRegression().fit(x_data, y_data)
 print(reg)
-scores = cross_val_score(reg, x_data, y_data, cv=10)
-print (scores)
-print ("*** Cross-validated score on Regression: ", scores.mean())
-
-#print("lm train score:", round(reg.score(x_train, y_train), 4))
-#print("lm test score:", round(reg.score(x_test, y_test), 4))
+print("lm train score:", round(reg.score(x_train, y_train), 4))
+print("lm test score:", round(reg.score(x_test, y_test), 4))
 
 X = sm.add_constant(x_train)
 lm = sm.OLS(y_train, X).fit()
 print(lm.summary())
 
 # Ridge Regression
-reg = Ridge().fit(x_data, y_data)
+reg = Ridge().fit(x_train, y_train)
 print(reg.intercept_)
 print(reg.coef_)
 print(reg)
-scores = cross_val_score(reg, x_data, y_data, cv=10)
-print (scores)
-print ("*** Cross-validated score on Ridge Regression: ", scores.mean())
-
-#print("Ridge train score:", reg.score(x_train, y_train))
-#print("Ridge test score:", reg.score(x_test, y_test))
+print("Ridge train score:", reg.score(x_train, y_train))
+print("Ridge test score:", reg.score(x_test, y_test))
 
 # Lasso Regression
-reg = Lasso().fit(x_data, y_data)
+reg = Lasso().fit(x_train, y_train)
 print(reg.intercept_)
 print(reg.coef_)
 print(reg)
-scores = cross_val_score(reg, x_data, y_data, cv=10)
-print (scores)
-print ("*** Cross-validated score on Lasso Regression: ", scores.mean())
-
-#print("Lasso train score:", reg.score(x_train, y_train))
-#print("Lasso test score:", reg.score(x_test, y_test))
+print("Lasso train score:", reg.score(x_train, y_train))
+print("Lasso test score:", reg.score(x_test, y_test))
 
 # SVM - regression with Hyper-parameter Tuning
 svr = SVR()
