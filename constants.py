@@ -18,4 +18,4 @@ columns_to_drop = [ 'Year', 'StateAbbr', 'DataSource', 'Measure','Data_Value_Uni
 columns_to_keep = ['StateDesc', 'Category', 'CityName', 'UniqueID', 'GeographicLevel', 'DataValueTypeID',
                    'PopulationCount', 'CityFIPS', 'TractFIPS', 'GeoLocation']
 
-random_state = 100
+random_state = 10

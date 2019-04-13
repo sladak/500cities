@@ -30,4 +30,4 @@ def get_data(path):
     city_pv.reset_index(level=0, inplace=True)
     tract_pv.reset_index(level=0, inplace=True)
 
-    return city_pv, tract_pv
+    return data, city_pv, tract_pv

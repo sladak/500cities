@@ -1,19 +1,12 @@
 import logging
 import warnings
 
-import statsmodels.api as sm
 import numpy as np
 import pandas as pd
 
-from sklearn.feature_selection import RFE
-from sklearn.linear_model import LinearRegression, Ridge, Lasso
-from sklearn.metrics import r2_score
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.svm import SVR
-
-from get_data import get_data
 from constants import *
-from util import analyze_state_level_data, feature_selection
+from get_data import get_data
+from util import feature_selection, visual_data_prep, append_existing_data
 
 
 def initial_setup():
@@ -26,29 +19,107 @@ def initial_setup():
     logger.info("Logger ready")
 
 
-initial_setup()
+def main(mode='Visual'):
+    initial_setup()
+    print("Accepted mode: \n1. Perform Analysis.\n2. Generate output file for visualization")
+    try:
+        mode = int(input('Enter the number of your selected mode:'))
+    except ValueError:
+        print("Not a number")
 
-# Change this to your local path
-path = "500_Cities__Local_Data_for_Better_Health__2018_release.csv"
-city_pv, tract_pv = get_data(path)
-logging.info("Get formatted pivot table data by city and census track from file: " + path)
+    # Local path to store the raw data
+    path = "500_Cities__Local_Data_for_Better_Health__2018_release.csv"
+    data, city_pv, tract_pv = get_data(path)
+    tract_pv.reset_index(level=0, inplace=True)
+    logging.info("Get formatted pivot table data by city and census track from file: " + path)
 
-logging.info("About to run feature selection for city level data")
-feature_selection_df = feature_selection(city_pv, outcome_cols, 5)
-feature_selection_df.to_csv("city_data.csv")
-logging.info("Country data has been saved to csv")
+    if mode == 1:
+        print("You have chose to run analysis for health care data")
 
-logging.info("About to run feature selection for each state")
-states = np.unique(tract_pv['StateDesc'])
-state_feature_selection_df = pd.DataFrame()
-for state in states:
-    logging.info("Feature selection for state %s" % state)
-    state_data = tract_pv[tract_pv['StateDesc'] == state]
-    df = feature_selection(state_data, outcome_cols, 5)
-    df["state"] = state
-    state_feature_selection_df = pd.concat([state_feature_selection_df, df])
-state_feature_selection_df.to_csv("state_feature_selection.csv")
-logging.info("States data has been saved to csv")
+        logging.info("About to run feature selection for city level data")
+        feature_selection_df = feature_selection(city_pv, outcome_cols, 5)
+        feature_selection_df.to_csv("city_data.csv")
+        logging.info("Country data has been saved to csv")
+
+        logging.info("About to run feature selection for each state")
+        states = np.unique(tract_pv['StateDesc'])
+        state_feature_selection_df = pd.DataFrame()
+        for state in states:
+            logging.info("Feature selection for state %s" % state)
+            state_data = tract_pv[tract_pv['StateDesc'] == state]
+            df = feature_selection(state_data, outcome_cols, 5)
+            df["state"] = state
+            state_feature_selection_df = pd.concat([state_feature_selection_df, df])
+        state_feature_selection_df.to_csv("state_feature_selection.csv")
+        logging.info("States data has been saved to csv")
+    elif mode == 2:
+        print("You have chose to generate output file for visualization")
+
+        result = pd.DataFrame()
+        logging.info("Start data prep in US level")
+        prev_data = data[data['GeographicLevel'] == 'US']
+
+        df = visual_data_prep(tract_pv, prev_data, outcome_cols, 5)
+        df['Region'] = 'US'
+        df['Level'] = 'US'
+        result = pd.concat([result, df])
+        logging.info("Complete data prep in US level")
+
+        logging.info("Start data prep in State level")
+        states = np.unique(tract_pv['StateDesc'])
+        state_df = pd.DataFrame()
+        for state in states:
+            state_data = tract_pv[tract_pv['StateDesc'] == state]
+            logging.info("Data prep for state %s with %s census tracks" % (state, len(state_data)))
+            prev_data = data[data['GeographicLevel'] == 'City']
+            prev_data = prev_data[prev_data['StateDesc'] == state]
+
+            # for state has more than 100 data points, we conduct another analysis on state level
+            if len(state_data) > 100:
+                df = visual_data_prep(state_data, prev_data, outcome_cols, 5)
+                df['PreventionCalculationLevel'] = 'State'
+                df["Region"] = state
+                df['Level'] = 'State'
+                state_df = pd.concat([state_df, df])
+
+            # Append national level data for each state with state prevalence information
+            df = append_existing_data(result[result.Level == 'US'], prev_data, state )
+
+            # For each cities with in the state
+            cities = np.unique(state_data['CityName'])
+            us_df = result[result.Level == 'US']
+
+            city_df = pd.DataFrame()
+            for city in cities:
+                temp = pd.DataFrame()
+                for outcome_col in outcome_cols:
+                    row = prev_data[prev_data.MeasureId == outcome_col]
+                    row = row[row.CityName == city]
+                    df2 = us_df[us_df['Outcome'] == outcome_col]
+                    df2['OutcomePrevalence'] = row.Data_Value.iloc[0]
+                    prevention = df2['Prevention'].iloc[:]
+                    p_list = []
+                    for p in prevention:
+                        prevention_row = prev_data[prev_data.MeasureId == p]
+                        prevention_row = prevention_row[prevention_row.CityName == city]
+                        prevention_prevalence = np.sum(
+                            prevention_row.Data_Value * prevention_row.PopulationCount) / np.sum(
+                            prevention_row.PopulationCount)
+                        p_list.append(prevention_prevalence)
+                    df2['PreventionPrevalence'] = p_list
+                    temp = pd.concat([temp, df2])
+                df = temp
+                df["Region"] = city
+                df['Level'] = 'City'
+                city_df = pd.concat([city_df, df])
+            result = pd.concat([result, city_df])
+        result = pd.concat([result, state_df])
+
+        logging.info("Complete data prep in State level")
+
+        result.to_csv("visual_input_tract_with_city.csv")
+        logging.info("csv file for visualization has been generated")
+
 
 # analyze_state_level_data can be used to run different models for all the states
 # analyze_state_level_data(tract_pv)
