@@ -1,8 +1,32 @@
-# 500cities
-Analysis of 500 cities health data published by CDC. Including code for processing and visualisation of data.
+#Visualization of relationship between ​chronic diseases and preventions in 500 US Cities​
+CSE6242 Data and Visual Analytics Project 
 
-DOWNLOAD RAW DATA FROM HERE AND PUT IT IN THE FOLDER, RENAME TO 'full_data.csv':
-https://chronicdata.cdc.gov/500-Cities/500-Cities-Local-Data-for-Better-Health-2018-relea/6vp6-wxuq
+## DESCRIPTION
+This package is used for analysis and interactive visualization to show the most prevalent diseases in the 500 largest cities in the US, 
+the factors that most contribute to those poor health outcomes and their prevalence within the cities with data provided by the Centers for Disease Control and Prevention (CDC).
+The packages contains two part. 
+The first part is implemented using Python. It takes the raw data input, perform data cleaning and modeling, generate the results and a pre-defined formatted file for further processing.
+The second part takes use of Tableau to provide an interactive visualization interface for people to understand the results we found from analysis. 
+
+## INSTALLATION
+1. Download the code base to local. 
+2. Install python 3 with numpy, pandas and scikit-learn libraries.
+3. Download raw data from below link and put it into the project code base folder. 
+    https://chronicdata.cdc.gov/500-Cities/500-Cities-Local-Data-for-Better-Health-2018-relea/6vp6-wxuq
+
+## EXECUTION 
+For analysis, run main.py file, three modes has been provided in the program. Follow the instruction from the console, it will ask you to enter the mode you want to use
+1. Perform top feature selection Analysis.
+This will select the top n factors that contribute to each of the health outcomes of all the states in US. 
+2. Generate output file for visualization.
+This is to generate the file used by our following visualization part. It generate the top 5 contributing factors of all the state and apply it to city level as well as provide the prevalence information of each health outcome and factors.
+3. Run multiple models comparision analysis.
+In this mode, you can select country level or a particular state to train the data with multiple regression models including linear regression, Ridge regression, Lasso regression and Support vector regression and compare the prediction accuracy and model information such as factor coefficients across different models.
+
+After generating the output file from mode 2, copy all the data to worksheet of data_prep.csv file provided, which can map the features with more meaningful descriptions and add the geographic location of each city and state to the file. 
+
+Next, load this file into Tableau.... 
+# TODO: Visualiation steps 
 
 FEATURE EXPLAINATIONS:
 
