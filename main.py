@@ -64,8 +64,8 @@ def main():
         logging.info("Start data prep in US level")
         prev_data = data[data['GeographicLevel'] == 'US']
 
-        df = visual_data_prep(city_pv, prev_data, outcome_cols, 5)
-        # df = visual_data_prep(tract_pv, prev_data, outcome_cols, 5)
+        #df = visual_data_prep(city_pv, prev_data, outcome_cols, 5)
+        df = visual_data_prep(tract_pv, prev_data, outcome_cols, 5)
         df['Region'] = 'US'
         df['Level'] = 'US'
         df['PreventionCalculationLevel'] = 'National'
@@ -120,7 +120,8 @@ def main():
                     city_df = pd.concat([city_df, df])
             result = pd.concat([result, city_df])
         result = pd.concat([result, state_df])
-
+        col_order = ['Region','Level','Outcome','Prevention','OutcomePrevalence','PredictionAccuracyScore','PreventionPrevalence','PreventionRank','PreventionCalculationLevel']
+        result = result [col_order]
         logging.info("Complete data prep in State level")
 
         result.to_csv("visual_input_tract_with_city.csv", index=False)
