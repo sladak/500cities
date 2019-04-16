@@ -23,10 +23,19 @@ This is to generate the file used by our following visualization part. It genera
 3. Run multiple models comparision analysis.
 In this mode, you can select country level or a particular state to train the data with multiple regression models including linear regression, Ridge regression, Lasso regression and Support vector regression and compare the prediction accuracy and model information such as factor coefficients across different models.
 
-After generating the output file from mode 2, copy all the data to worksheet of data_prep.csv file provided, which can map the features with more meaningful descriptions and add the geographic location of each city and state to the file. 
+## STEPS TO GENERATE INPUT DATA FOR TABLEAU
+The final visualization is available for viewing at:
+############### TO DO
+#### ADD URL
+The  tableau workbook and the input data file for the visualization are also included in this folder (visualization_input.csv). To re-generate it, follow the below steps:
+
+1. Generate the output file from mode 2.
+2. Copy all the data to worksheet of data_prep.xlsx file provided, which maps the features with more meaningful descriptions and add the geographic location of each city and state to the file. 
+3. Save the new datasheet as a csv called visualization_input.csv. This will overwrite the existing visualization_input file.
+4. Open the included Tableau file in Tableau to see the visualization with the new data file.
 
 Next, load this file into Tableau.... 
-# TODO: Visualiation steps 
+
 
 FEATURE EXPLAINATIONS:
 
