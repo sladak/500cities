@@ -11,7 +11,12 @@ The second part takes use of Tableau to provide an interactive visualization int
 ## INSTALLATION
 1. Download the code base to local. 
 2. Install python 3 with numpy, pandas and scikit-learn libraries.
-3. Download raw data from below link and put it into the project code base folder. 
+3A. IMPORTANT: RUNNING THE ANALYSIS ON THE FULL DATASET WILL TAKE MANY (10-20) hours. We have included an extract of the data for faster testing. Simple copy the included file below:
+    500_Cities__Local_Data_for_Better_Health__2018_release_sample.csv
+    AS
+    500_Cities__Local_Data_for_Better_Health__2018_release.csv
+    Alternatively:
+    Download raw data from below link and put it into the project code base folder. 
     https://chronicdata.cdc.gov/500-Cities/500-Cities-Local-Data-for-Better-Health-2018-relea/6vp6-wxuq
 
 ## EXECUTION 
@@ -25,16 +30,17 @@ In this mode, you can select country level or a particular state to train the da
 
 ## STEPS TO GENERATE INPUT DATA FOR TABLEAU
 The final visualization is available for viewing at:
-############### TO DO
-#### ADD URL
-The  tableau workbook and the input data file for the visualization are also included in this folder (visualization_input.csv). To re-generate it, follow the below steps:
+https://public.tableau.com/profile/myles.lefkovitz#!/vizhome/500_Cities_Visualizations/Story
+#############
+The  tableau workbook and the input data file for the visualization are also included in this folder
+    500_Cities_Visualizations.twbx (Tableau workbook)
+    visualization_input.csv (input file for Tableau workbook)
+To re-generate the input file, follow the below steps (note, the anlysis on the full data takes roughly 15 hours):
 
 1. Generate the output file from mode 2.
 2. Copy all the data to worksheet of data_prep.xlsx file provided, which maps the features with more meaningful descriptions and add the geographic location of each city and state to the file. 
 3. Save the new datasheet as a csv called visualization_input.csv. This will overwrite the existing visualization_input file.
-4. Open the included Tableau file in Tableau to see the visualization with the new data file.
-
-Next, load this file into Tableau.... 
+4. Open the included Tableau file in Tableau, select Data tab and select the new data input file.
 
 
 FEATURE EXPLAINATIONS:

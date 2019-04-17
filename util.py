@@ -105,6 +105,7 @@ def feature_selection(clean_data, cols, n=5):
 def visual_data_prep(clean_data, prev_data, cols, n=5):
     df = pd.DataFrame()
     for outcome_col in cols:
+        print("analysing ", outcome_col)
         x_data = clean_data.loc[:, clean_data.columns.isin(prevention_cols + behavior_cols)]
         y_data = clean_data.loc[:, outcome_col]
 

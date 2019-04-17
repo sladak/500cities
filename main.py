@@ -58,7 +58,7 @@ def main():
         state_feature_selection_df.to_csv("state_feature_selection.csv")
         logging.info("States data has been saved to csv")
     elif mode == 2:
-        print("You have chose to generate output file for visualization")
+        print("You have chosen to generate output file for visualization")
 
         result = pd.DataFrame()
         logging.info("Start data prep in US level")
