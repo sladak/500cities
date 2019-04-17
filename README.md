@@ -11,7 +11,7 @@ The second part takes use of Tableau to provide an interactive visualization int
 ## INSTALLATION
 1. Download the code base to local. 
 2. Install python 3 with numpy, pandas and scikit-learn libraries.
-3A. IMPORTANT: RUNNING THE ANALYSIS ON THE FULL DATASET WILL TAKE MANY (10-20) hours. We have included an extract of the data for faster testing. Simple copy the included file below:
+3A. IMPORTANT: RUNNING THE ANALYSIS ON THE FULL DATASET WILL TAKE MANY (10-20) hours. We have included an extract of the data for faster testing. Simply copy the included file below:
     500_Cities__Local_Data_for_Better_Health__2018_release_sample.csv
     AS
     500_Cities__Local_Data_for_Better_Health__2018_release.csv
@@ -23,7 +23,7 @@ The second part takes use of Tableau to provide an interactive visualization int
 For analysis, run main.py file, three modes has been provided in the program. Follow the instruction from the console, it will ask you to enter the mode you want to use
 1. Perform top feature selection Analysis.
 This will select the top n factors that contribute to each of the health outcomes of all the states in US. 
-2. Generate output file for visualization.
+2. Generate output file for visualizatio - named visual_input_tract_with_city.csv
 This is to generate the file used by our following visualization part. It generate the top 5 contributing factors of all the state and apply it to city level as well as provide the prevalence information of each health outcome and factors.
 3. Run multiple models comparision analysis.
 In this mode, you can select country level or a particular state to train the data with multiple regression models including linear regression, Ridge regression, Lasso regression and Support vector regression and compare the prediction accuracy and model information such as factor coefficients across different models.
@@ -37,8 +37,8 @@ The  tableau workbook and the input data file for the visualization are also inc
     visualization_input.csv (input file for Tableau workbook)
 To re-generate the input file, follow the below steps (note, the anlysis on the full data takes roughly 15 hours):
 
-1. Generate the output file from mode 2.
-2. Copy all the data to worksheet of data_prep.xlsx file provided, which maps the features with more meaningful descriptions and add the geographic location of each city and state to the file. 
+1. Generate the output file from mode 2 - visual_input_tract_with_city.csv
+2. Copy all the data from that file to data_prep.xlsx file provided, which maps the features with more meaningful descriptions and add the geographic location of each city and state to the file.  Remember to exclude the heading when you copy.
 3. Save the new datasheet as a csv called visualization_input.csv. This will overwrite the existing visualization_input file.
 4. Open the included Tableau file in Tableau, select Data tab and select the new data input file.
 
