@@ -1,5 +1,4 @@
 #Visualization of relationship between ​chronic diseases and preventions in 500 US Cities​
-CSE6242 Data and Visual Analytics Project 
 
 ## DESCRIPTION
 This package is used for analysis and interactive visualization to show the most prevalent diseases in the 500 largest cities in the US, 
